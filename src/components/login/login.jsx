@@ -33,11 +33,28 @@ function Login() {
             .catch((err) => console.log(err));
       }
    };
+   const handleKeyPress = (event) => {
+      if (event.key === "Enter") {
+         if (errors.email === "" && errors.password === "") {
+            axios
+               .post("http://localhost:8081/login", values)
+               .then((res) => {
+                  if (res.data === "Success") {
+                     navigate("/main");
+                  } else {
+                     alert("No record existed");
+                  }
+               })
+               .catch((err) => console.log(err));
+         }
+      }
+   };
+
    return (
       <div className="flex justify-center items-center vh-100 bg-dark ">
          <div className="bg-white p-3 rounded w-25 ">
             <h3 className="m-auto w-20">Login</h3>
-            <form action="" onSubmit={handleSubmit}>
+            <form action="" onSubmit={handleSubmit} onKeyDown={handleKeyPress}>
                <div className="mb-3">
                   <label htmlFor="email">
                      <strong>Email</strong>

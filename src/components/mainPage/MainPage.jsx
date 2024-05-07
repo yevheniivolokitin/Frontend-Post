@@ -1,9 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import NavBar from "../navBar/navBar";
+import Post from "../post/post";
+import axios from "axios";
 
 function MainPage() {
+   const [posts, setPosts] = useState([]);
+   useEffect(() => {
+      axios
+         .get("http://localhost:8081/main")
+         .then((res) => {
+            console.log("Полученные посты:", res.data);
+            setPosts(...posts, res.data);
+         })
+         .catch((err) => {
+            console.error("Ошибка при получении постов:", err);
+         });
+   }, []);
    return (
-      <div className="flex justify-center justify-items-center w-100 h-100">
-         <h1>Welcome to main page</h1>
+      <div className="bg-dark w-full h-full  box-border">
+         <header>
+            <NavBar />
+         </header>
+         <div className="flex justify-center justify-items-center">
+            <h1>Welcome to main page</h1>
+         </div>
+         <div className="w-2/3 m-auto flex flex-col gap-10">
+            {posts.map((post) => (
+               <Post key={post.id} postInfo={post} />
+            ))}
+         </div>
       </div>
    );
 }
