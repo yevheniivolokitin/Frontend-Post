@@ -3,8 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import Validation from "../../Validation/SignUpValidation";
 import { useState } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+import { usernameSave } from "../../redux/actions/usernameActions";
 
-function SignUp() {
+function SignUp({ usernameSave }) {
    const navigate = useNavigate();
    const [errors, setErrors] = useState({});
    const [values, setValues] = useState({
@@ -23,6 +25,7 @@ function SignUp() {
       event.preventDefault();
       setErrors(Validation(values));
       if (errors.name === "" && errors.email === "" && errors.password === "") {
+         usernameSave(values.name);
          axios
             .post("http://localhost:8081/signup", values)
             .then((res) => {
@@ -96,4 +99,8 @@ function SignUp() {
    );
 }
 
-export default SignUp;
+const mapDispatchToProps = {
+   usernameSave, // Подключаем action creator к компоненту через mapDispatchToProps
+};
+
+export default connect(null, mapDispatchToProps)(SignUp);

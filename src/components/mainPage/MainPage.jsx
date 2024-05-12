@@ -15,6 +15,7 @@ function MainPage() {
          .catch((err) => {
             console.error("Ошибка при получении постов:", err);
          });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
    return (
       <div className="bg-dark w-full h-full  box-border">

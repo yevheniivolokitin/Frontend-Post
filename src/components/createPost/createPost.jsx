@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import NavBar from "../navBar/navBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectUsername } from "../../redux/selectors/usernameSelector";
 
 function CreatePost() {
+   const username = useSelector(selectUsername);
    const navigate = useNavigate();
    const [values, setValues] = useState({
       title: "",
       content: "",
       image_url: "",
+      username: username,
    });
    const handleSubmit = (event) => {
       event.preventDefault();
+      console.log(values);
       axios
          .post("http://localhost:8081/create", values)
          .then((res) => {
