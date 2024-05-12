@@ -5,9 +5,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { Link } from "react-router-dom";
 
 function NavBar() {
-   const logout = () => {
-      localStorage.removeItem("token");
-   };
    return (
       <Navbar expand="lg" className=" bg-slate-700">
          <Container>
@@ -51,7 +48,10 @@ function NavBar() {
                      <NavDropdown.Divider />
                      <Link
                         className="no-underline text-black flex justify-between h-full items-center"
-                        onClick={logout}
+                        onClick={() => {
+                           localStorage.removeItem("token");
+                        }}
+                        to={"/"}
                      >
                         Exit
                      </Link>
