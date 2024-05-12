@@ -1,7 +1,7 @@
 import { SAVE_USERNAME } from "../actions/types";
-
+const storedUsername = localStorage.getItem("username");
 const initialState = {
-   username: [],
+   username: storedUsername ? storedUsername : "",
 };
 
 const usernameReducer = (state = initialState, action) => {

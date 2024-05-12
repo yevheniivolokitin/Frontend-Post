@@ -15,7 +15,6 @@ function Login() {
          ...prev,
          [event.target.name]: event.target.value,
       }));
-      console.log(values);
    };
    const handleSubmit = (event) => {
       event.preventDefault();
@@ -24,7 +23,9 @@ function Login() {
          axios
             .post("http://localhost:8081/login", values)
             .then((res) => {
-               if (res.data === "Success") {
+               if (res.status === 200) {
+                  const token = res.data.token;
+                  localStorage.setItem("token", token);
                   navigate("/main");
                } else {
                   alert("No record existed");

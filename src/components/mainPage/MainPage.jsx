@@ -5,6 +5,7 @@ import axios from "axios";
 
 function MainPage() {
    const [posts, setPosts] = useState([]);
+
    useEffect(() => {
       axios
          .get("http://localhost:8081/main")
@@ -18,14 +19,14 @@ function MainPage() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
    return (
-      <div className="bg-dark w-full h-full  box-border">
+      <div className="bg-dark w-full min-h-screen h-full  box-border">
          <header>
             <NavBar />
          </header>
          <div className="flex justify-center justify-items-center">
             <h1>Welcome to main page</h1>
          </div>
-         <div className="w-2/3 m-auto flex flex-col gap-10">
+         <div className=" w-3/6 m-auto flex flex-col gap-10">
             {posts.map((post) => (
                <Post key={post.id} postInfo={post} />
             ))}

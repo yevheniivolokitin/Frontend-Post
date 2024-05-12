@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../navBar/navBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { selectUsername } from "../../redux/selectors/usernameSelector";
 
 function CreatePost() {
-   const username = useSelector(selectUsername);
    const navigate = useNavigate();
    const [values, setValues] = useState({
       title: "",
       content: "",
       image_url: "",
-      username: username,
+      username: "",
+      created_at: "",
    });
+   useEffect(() => {
+      const storedUsername = localStorage.getItem("username");
+      if (storedUsername) {
+         setValues((prev) => ({
+            ...prev,
+            username: storedUsername,
+         }));
+      }
+   }, []);
    const handleSubmit = (event) => {
       event.preventDefault();
-      console.log(values);
+
       axios
          .post("http://localhost:8081/create", values)
          .then((res) => {
@@ -36,35 +43,51 @@ function CreatePost() {
       console.log(values);
    };
    return (
-      <div className="bg-dark w-full h-full   box-border">
+      <div className="bg-dark w-screen h-screen box-border ">
          <header>
             <NavBar />
          </header>
-         <div className="flex justify-center justify-items-center ">
-            <h1 className=" c-white">Welcome to create page</h1>
+         <div className="flex justify-center items-center h-5/6 min-h-96 box-border  ">
             <form
                onSubmit={handleSubmit}
-               className="flex flex-col gap-10 bg-slate-400"
+               className="flex flex-col gap-10 justify-center items-center bg-slate-500 w-3/12 h-full max-h-96 rounded-xl shadow-2xl shadow-neutral-600 "
             >
-               <input
-                  name="title"
-                  type="text"
-                  placeholder="Title"
-                  onChange={handleInput}
-               />
-               <input
-                  name="content"
-                  type="text"
-                  placeholder="Content"
-                  onChange={handleInput}
-               />
-               <input
-                  name="image_url"
-                  type="text"
-                  placeholder="Image Url"
-                  onChange={handleInput}
-               />
-               <button type="submit"> Create post</button>
+               <div className="w-10/12">
+                  <p className="text-white font-bold  m-0">Title</p>
+                  <input
+                     className="w-full h-10 rounded-3xl pl-4 box-border"
+                     name="title"
+                     type="text"
+                     placeholder="Title"
+                     onChange={handleInput}
+                  />
+               </div>
+               <div className="w-10/12">
+                  <p className="text-white font-bold  m-0">Content</p>
+                  <input
+                     className="w-full h-10 rounded-3xl pl-4 box-border"
+                     name="content"
+                     type="text"
+                     placeholder="Content"
+                     onChange={handleInput}
+                  />
+               </div>
+               <div className="w-10/12">
+                  <p className="text-white font-bold  m-0">Image URL</p>
+                  <input
+                     className="w-full h-10 rounded-3xl pl-4 box-border"
+                     name="image_url"
+                     type="text"
+                     placeholder="Image Url"
+                     onChange={handleInput}
+                  />
+               </div>
+               <button
+                  className=" w-40 h-10 bg-slate-500 border-2  text-white rounded-3xl shadow-lg shadow-indigo-500/40"
+                  type="submit"
+               >
+                  Create post
+               </button>
             </form>
          </div>
       </div>

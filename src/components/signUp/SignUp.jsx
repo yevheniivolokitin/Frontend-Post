@@ -25,7 +25,12 @@ function SignUp({ usernameSave }) {
       event.preventDefault();
       setErrors(Validation(values));
       if (errors.name === "" && errors.email === "" && errors.password === "") {
+         // Save username to local storage
+         localStorage.setItem("username", values.name);
+
+         // Dispatch usernameSave action
          usernameSave(values.name);
+
          axios
             .post("http://localhost:8081/signup", values)
             .then((res) => {
@@ -40,7 +45,7 @@ function SignUp({ usernameSave }) {
             <h3 className="m-auto w-25">SignUp</h3>
             <form action="" onSubmit={handleSubmit}>
                <div className="mb-3">
-                  <label htmlFor="name">
+                  <label>
                      <strong>Username</strong>
                   </label>
                   <input
@@ -55,7 +60,7 @@ function SignUp({ usernameSave }) {
                   )}
                </div>
                <div className="mb-3">
-                  <label htmlFor="email">
+                  <label>
                      <strong>Email</strong>
                   </label>
                   <input
@@ -70,7 +75,7 @@ function SignUp({ usernameSave }) {
                   )}
                </div>
                <div className="mb-3">
-                  <label htmlFor="password">
+                  <label>
                      <strong>Password</strong>
                   </label>
                   <input
