@@ -12,36 +12,54 @@ function CreatePost() {
       username: "",
       created_at: "",
    });
+
    useEffect(() => {
+      // Получаем токен из localStorage и устанавливаем имя пользователя
+      const token = localStorage.getItem("token");
       const storedUsername = localStorage.getItem("username");
-      if (storedUsername) {
+      if (token && storedUsername) {
          setValues((prev) => ({
             ...prev,
             username: storedUsername,
          }));
       }
    }, []);
+
    const handleSubmit = (event) => {
       event.preventDefault();
 
-      axios
-         .post("http://localhost:8081/create", values)
-         .then((res) => {
-            if (res.status === 200) {
-               navigate("/main");
-            } else {
-               alert("No record existed");
-            }
-         })
-         .catch((err) => console.log(err));
+      // Получаем токен из localStorage
+      const token = localStorage.getItem("token");
+
+      // Проверяем наличие токена
+      if (token) {
+         // Устанавливаем заголовок Authorization с токеном
+         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+         // Отправляем запрос на создание поста с данными формы
+         axios
+            .post("http://localhost:8081/create", values)
+            .then((res) => {
+               if (res.status === 200) {
+                  navigate("/main");
+               } else {
+                  alert("No record existed");
+               }
+            })
+            .catch((err) => console.log(err));
+      } else {
+         // Если токен не найден, перенаправляем пользователя на страницу входа
+         navigate("/");
+      }
    };
+
    const handleInput = (event) => {
       setValues((prev) => ({
          ...prev,
          [event.target.name]: event.target.value,
       }));
-      console.log(values);
    };
+
    return (
       <div className="bg-dark w-screen h-screen box-border ">
          <header>
@@ -83,7 +101,7 @@ function CreatePost() {
                   />
                </div>
                <button
-                  className=" w-40 h-10 bg-slate-500 border-2  text-white rounded-3xl shadow-lg shadow-indigo-500/40"
+                  className="w-40 h-10 bg-slate-500 border-2  text-white rounded-3xl shadow-lg shadow-indigo-500/40"
                   type="submit"
                >
                   Create post

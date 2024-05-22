@@ -7,17 +7,21 @@ function MainPage() {
    const [posts, setPosts] = useState([]);
 
    useEffect(() => {
+      const token = localStorage.getItem("token"); // Получаем токен из localStorage
+
+      // Если токен есть, добавляем его в заголовок запроса
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
       axios
-         .get("http://localhost:8081/main")
+         .get("http://localhost:8081/main", { headers }) // Передаем заголовок с токеном
          .then((res) => {
-            console.log("Полученные посты:", res.data);
-            setPosts(...posts, res.data);
+            setPosts(res.data);
          })
          .catch((err) => {
             console.error("Ошибка при получении постов:", err);
          });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
+
    return (
       <div className="bg-dark w-full min-h-screen h-full  box-border">
          <header>
