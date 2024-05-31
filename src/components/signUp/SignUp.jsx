@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { usernameSave } from "../../redux/actions/usernameActions";
+import { v4 as uuidv4 } from "uuid"; // Import UUID
 
 function SignUp({ usernameSave }) {
    const navigate = useNavigate();
@@ -14,6 +15,7 @@ function SignUp({ usernameSave }) {
       email: "",
       password: "",
    });
+
    const handleInput = (event) => {
       setValues((prev) => ({
          ...prev,
@@ -21,10 +23,17 @@ function SignUp({ usernameSave }) {
       }));
       console.log(values);
    };
+
    const handleSubmit = (event) => {
       event.preventDefault();
       setErrors(Validation(values));
       if (errors.name === "" && errors.email === "" && errors.password === "") {
+         // Generate a unique ID
+         const userId = uuidv4();
+
+         // Add the generated ID to the values object
+         const userValues = { ...values, user_id: userId };
+
          // Save username to local storage
          localStorage.setItem("username", values.name);
 
@@ -32,13 +41,14 @@ function SignUp({ usernameSave }) {
          usernameSave(values.name);
 
          axios
-            .post("http://localhost:8081/signup", values)
+            .post("http://localhost:8081/signup", userValues)
             .then((res) => {
                navigate("/");
             })
             .catch((err) => console.log(err));
       }
    };
+
    return (
       <div className="flex justify-center items-center vh-100 bg-dark">
          <div className="bg-white p-3 rounded w-25 ">
